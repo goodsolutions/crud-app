@@ -14,6 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.aquent.crudapp.domain.Person;
 import com.aquent.crudapp.service.PersonService;
+import com.aquent.crudapp.service.ClientService;
 
 /**
  * Controller for handling basic person management operations.
@@ -25,6 +26,7 @@ public class PersonController {
     public static final String COMMAND_DELETE = "Delete";
 
     @Inject private PersonService personService;
+    @Inject private ClientService clientService;
 
     /**
      * Renders the listing page.
@@ -47,6 +49,7 @@ public class PersonController {
     public ModelAndView create() {
         ModelAndView mav = new ModelAndView("person/create");
         mav.addObject("person", new Person());
+        mav.addObject("clients", clientService.listClient());
         mav.addObject("errors", new ArrayList<String>());
         return mav;
     }
@@ -64,6 +67,7 @@ public class PersonController {
         List<String> errors = personService.validatePerson(person);
         if (errors.isEmpty()) {
             personService.createPerson(person);
+            clientService.createClientContract(person);
             return new ModelAndView("redirect:/person/list");
         } else {
             ModelAndView mav = new ModelAndView("person/create");
@@ -83,6 +87,7 @@ public class PersonController {
     public ModelAndView edit(@PathVariable Integer personId) {
         ModelAndView mav = new ModelAndView("person/edit");
         mav.addObject("person", personService.readPerson(personId));
+        mav.addObject("clients", clientService.listClient());
         mav.addObject("errors", new ArrayList<String>());
         return mav;
     }
@@ -100,6 +105,7 @@ public class PersonController {
         List<String> errors = personService.validatePerson(person);
         if (errors.isEmpty()) {
             personService.updatePerson(person);
+            clientService.updateClientContract(person);
             return new ModelAndView("redirect:/person/list");
         } else {
             ModelAndView mav = new ModelAndView("person/edit");

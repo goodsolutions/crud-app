@@ -6,5 +6,20 @@ CREATE TABLE person (
     street_address varchar(50) NOT NULL,
     city varchar(50) NOT NULL,
     state varchar(2) NOT NULL,
+    zip_code varchar(5) NOT NULL,
+    client_name varchar(50) NULL
+);
+CREATE TABLE client (
+    client_id integer IDENTITY,
+    client_name varchar(50) NOT NULL,
+    client_uri varchar(200) NOT NULL,
+    phone_number varchar(20) NOT NULL,
+    street_address varchar(50) NOT NULL,
+    city varchar(50) NOT NULL,
+    state varchar(2) NOT NULL,
     zip_code varchar(5) NOT NULL
+);
+CREATE TABLE client_contact (
+    client_id integer NOT NULL,
+    person_id integer NOT NULL
 );
